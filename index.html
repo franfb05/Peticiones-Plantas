@@ -90,6 +90,26 @@
   .bolsa-chip { padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px; }
   .bolsa-vapor { background:var(--blue-light); color:var(--blue-accent); }
   .bolsa-plasma { background:#F3E8FF; color:#7C3AED; }
+
+  .cat-block { margin-bottom:16px; }
+  .cat-header { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--white); background:var(--blue-accent); padding:6px 10px; border-radius:6px 6px 0 0; }
+  .cat-grid { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--gray-200); border-top:none; border-radius:0 0 6px 6px; overflow:hidden; }
+  .cat-item { display:flex; align-items:center; justify-content:space-between; padding:6px 10px; border-bottom:1px solid var(--gray-100); font-size:13px; gap:8px; }
+  .cat-item:nth-child(odd) { border-right:1px solid var(--gray-100); }
+  .cat-item:last-child, .cat-item:nth-last-child(2):nth-child(odd) { border-bottom:none; }
+  .cat-item-nom { flex:1; color:var(--gray-800); font-size:12px; }
+  .qty-input { width:54px !important; text-align:center; padding:5px 4px !important; font-family:var(--mono) !important; font-weight:600 !important; font-size:13px !important; border-radius:6px !important; }
+
+  .cat-item-custom { grid-column:1/-1; padding:10px; }
+  .custom-row { display:flex; flex-direction:column; gap:8px; margin-bottom:8px; }
+  .custom-entry { display:flex; gap:8px; align-items:center; }
+  .custom-entry input[type="text"] { flex:1; font-size:12px; padding:6px 8px; border:1.5px solid var(--gray-200); border-radius:6px; font-family:var(--font); }
+  .custom-entry input[type="text"]:focus { outline:none; border-color:var(--blue-accent); }
+  .custom-entry input[type="number"] { width:54px; text-align:center; padding:5px 4px; font-family:var(--mono); font-weight:600; font-size:13px; border:1.5px solid var(--gray-200); border-radius:6px; }
+  .custom-entry .btn-remove { background:none; border:none; color:var(--gray-400); cursor:pointer; font-size:16px; padding:0 4px; }
+  .custom-entry .btn-remove:hover { color:var(--red); }
+  .btn-add-other { background:none; border:1.5px dashed var(--gray-200); border-radius:6px; color:var(--blue-accent); font-size:12px; font-weight:600; padding:6px 12px; cursor:pointer; width:100%; font-family:var(--font); }
+  .btn-add-other:hover { background:var(--blue-light); border-color:var(--blue-accent); }
   .not-found { text-align:center; padding:48px 24px; color:var(--gray-400); }
   .not-found .icon { font-size:40px; margin-bottom:12px; }
   .loading { text-align:center; padding:32px; color:var(--gray-400); font-size:14px; }
@@ -148,12 +168,9 @@
         </div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" style="padding:16px;">
       <div class="card-title">Material a esterilitzar</div>
-      <table class="instrumental-table">
-        <thead><tr><th>Material</th><th style="width:90px;text-align:center;">Quantitat</th></tr></thead>
-        <tbody id="instrumental-body"></tbody>
-      </table>
+      <div id="instrumental-container"></div>
     </div>
     <div class="card">
       <div class="card-title">Observacions</div>
@@ -221,26 +238,10 @@ const INSTRUMENTAL = [
     "Safata","Gots","Plats","Palangana","Culleretes","Forquilla","Ganivet",
     "Culleres","Gibrella","Ampolla vidre","Ampolla diüresi","Diversos"
   ]},
-  { cat: "Laboratori", items: [
-    "Farmàcia","Pipetes","Puntes","Eppendorf","Caixes","Pots col·liri",
-    "Tapes gomes","Ampolles"
-  ]},
   { cat: "Tèxtil", items: [
     "B. elàstiques","Benes 10x10","Benes 5x5"
   ]},
-  { cat: "Altres", items: [] },
-  { cat: "Urg. Q AG", items: [
-    "Amputació","Àpex","Ap. laparoscòpia","By-pass","C. nasal","C. toràcica",
-    "C. cures","Citoscopi","Drill","Especial vascular","Esofagosc. rígid",
-    "Làparo","Laparoscòpia","Maxi-lofacial","Maxi-lofacial-oral","Neurocirurgia",
-    "Òptica 0°-30°-70°","Percath","Pinces biòpsia uro","Pl. Tarma Leibinger",
-    "Cargol Karllis","Portes laparoscòpia","Proctologia","Resector urologia",
-    "Ungla d'Albarran"
-  ]},
-  { cat: "Urg. Q AMI", items: [
-    "Cesària","Raspatge","Abdominal","Supl. abdominal","Làparo base",
-    "Petita cirurgia","FIV","Part","Venotomia","Material embossat"
-  ]}
+  { cat: "Altres", items: ["__custom__"] }
 ];
 
 const ESTATS = [
@@ -266,19 +267,30 @@ function renderDate() {
 }
 
 function renderInstrumental() {
+  const container = document.getElementById('instrumental-container');
   let html = '';
   INSTRUMENTAL.forEach(cat => {
     if (!cat.items.length) return;
-    html += `<tr><td colspan="2" style="background:var(--gray-100);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray-400);padding:8px 12px;">${cat.cat}</td></tr>`;
+    html += `<div class="cat-block">
+      <div class="cat-header">${cat.cat}</div>
+      <div class="cat-grid">`;
     cat.items.forEach(item => {
+      if (item === '__custom__') {
+        html += `<div class="cat-item-custom">
+          <div class="custom-row" id="custom-rows"></div>
+          <button type="button" class="btn-add-other" onclick="addOtherRow()">+ Afegir material</button>
+        </div>`;
+        return;
+      }
       const key = (cat.cat + '_' + item).replace(/\W/g,'_');
-      html += `<tr>
-        <td style="padding-left:20px;">${item}</td>
-        <td style="text-align:center;"><input type="number" class="qty-input" min="0" max="99" value="0" id="qty_${key}"></td>
-      </tr>`;
+      html += `<div class="cat-item">
+        <span class="cat-item-nom">${item}</span>
+        <input type="number" class="qty-input" min="0" max="99" value="0" id="qty_${key}">
+      </div>`;
     });
+    html += `</div></div>`;
   });
-  document.getElementById('instrumental-body').innerHTML = html;
+  container.innerHTML = html;
 }
 
 async function loadServeis() {
@@ -321,6 +333,24 @@ function updateAutoFields() {
   }
 }
 
+
+let otherRowCount = 0;
+
+function addOtherRow() {
+  const container = document.getElementById('custom-rows');
+  const id = 'other_' + (++otherRowCount);
+  const div = document.createElement('div');
+  div.className = 'custom-entry';
+  div.id = id;
+  div.innerHTML = `
+    <input type="text" placeholder="Nom del material..." id="${id}_nom">
+    <input type="number" min="1" max="99" value="1" id="${id}_qty">
+    <button class="btn-remove" onclick="document.getElementById('${id}').remove()">✕</button>
+  `;
+  container.appendChild(div);
+  div.querySelector('input[type="text"]').focus();
+}
+
 function generateCode() {
   const L = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
   let c = L[Math.floor(Math.random()*L.length)] + L[Math.floor(Math.random()*L.length)];
@@ -349,6 +379,13 @@ async function enviarPeticio() {
       const qty = parseInt(document.getElementById('qty_'+key)?.value)||0;
       if (qty > 0) material.push({ nom: cat.cat + ' · ' + item, qty });
     });
+  });
+
+  // Recollir "Altres" personalitzats
+  document.querySelectorAll('.custom-entry').forEach(row => {
+    const nom = row.querySelector('input[type="text"]')?.value.trim();
+    const qty = parseInt(row.querySelector('input[type="number"]')?.value)||0;
+    if (nom && qty > 0) material.push({ nom: 'Altres · ' + nom, qty });
   });
 
   if (!material.length) {
@@ -398,6 +435,9 @@ function resetForm() {
   document.getElementById('solicitant').value = '';
   document.getElementById('obs').value = '';
   document.querySelectorAll('.qty-input').forEach(i => i.value = 0);
+  const cr = document.getElementById('custom-rows');
+  if (cr) cr.innerHTML = '';
+  otherRowCount = 0;
   document.getElementById('error-nova').innerHTML = '';
 }
 
