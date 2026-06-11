@@ -549,8 +549,6 @@
             <option value="hmi">Hospital Materno Infantil</option>
             <option value="hg">Hospital General</option>
             <option value="ce">Consultes Externes</option>
-            <option value="cap_horta">CAP Horta</option>
-            <option value="sant_andreu">Sant Andreu</option>
             <option value="transversal">Serveis Transversals</option>
           </select>
         </div>
@@ -662,26 +660,10 @@ const CENTRES = {
   ce: {
     nom: "Consultes Externes",
     plantes: [
-      { id: "ce_trau",  nom: "Traumatologia",     ext: "5110", cfh: "5010" },
-      { id: "ce_derm",  nom: "Dermatologia",       ext: "5120", cfh: "5011" },
-      { id: "ce_oftal", nom: "Oftalmologia",       ext: "5130", cfh: "5012" },
-      { id: "ce_oto",   nom: "Otorrinolaringologia",ext:"5140", cfh: "5013" },
-      { id: "ce_gine",  nom: "Ginecologia",        ext: "5150", cfh: "5014" },
+      { id: "ce_Horta",  nom: "CAP HORTA",     ext: "936857514", cfh: "5010" },
+      { id: "ce_S_Andreu",  nom: "CAP Sant Andreu",     ext: "936589624", cfh: "5780" },
     ]
   },
-  cap_horta: {
-    nom: "CAP Horta",
-    plantes: [
-      { id: "cap_h_gen", nom: "Medicina General", ext: "6110", cfh: "6010" },
-      { id: "cap_h_inf", nom: "Infermeria",        ext: "6120", cfh: "6011" },
-    ]
-  },
-  sant_andreu: {
-    nom: "Sant Andreu",
-    plantes: [
-      { id: "sa_gen",  nom: "Medicina General", ext: "7110", cfh: "7010" },
-      { id: "sa_urg",  nom: "Urgències",         ext: "7200", cfh: "7020" },
-    ]
   },
   transversal: {
     nom: "Serveis Transversals",
