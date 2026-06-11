@@ -7,97 +7,97 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
   :root {
-    --blue-dark: #0B1F3A; --blue-mid: #1A3A5C; --blue-accent: #1D6FA4;
-    --blue-light: #E8F2FA; --teal: #0D9488; --teal-light: #CCFBF1;
-    --amber: #D97706; --amber-light: #FEF3C7;
-    --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0;
-    --gray-400: #94A3B8; --gray-600: #475569; --gray-800: #1E293B;
-    --white: #FFFFFF; --font: 'Inter', sans-serif; --mono: 'JetBrains Mono', monospace;
+    --blue-dark:#0B1F3A; --blue-mid:#1A3A5C; --blue-accent:#1D6FA4;
+    --blue-light:#E8F2FA; --teal:#0D9488; --teal-light:#CCFBF1;
+    --amber:#D97706; --amber-light:#FEF3C7;
+    --gray-50:#F8FAFC; --gray-100:#F1F5F9; --gray-200:#E2E8F0;
+    --gray-400:#94A3B8; --gray-600:#475569; --gray-800:#1E293B;
+    --white:#FFFFFF; --font:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font); background: var(--gray-50); color: var(--gray-800); min-height: 100vh; }
-  header { background: var(--blue-dark); color: var(--white); padding: 0 32px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  .header-brand { display: flex; align-items: center; gap: 12px; }
-  .header-brand .icon { width: 32px; height: 32px; background: var(--blue-accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-  .header-brand h1 { font-size: 15px; font-weight: 600; }
-  .header-brand span { font-size: 12px; color: var(--gray-400); }
-  .header-right { font-size: 12px; color: var(--gray-400); }
-  .tabs { background: var(--blue-mid); padding: 0 32px; display: flex; }
-  .tab { padding: 14px 24px; font-size: 13px; font-weight: 500; color: var(--gray-400); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.15s; user-select: none; }
-  .tab:hover { color: var(--white); }
-  .tab.active { color: var(--white); border-bottom-color: var(--teal); }
-  main { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
-  .panel { display: none; }
-  .panel.active { display: block; }
-  .section-title { font-size: 20px; font-weight: 700; color: var(--blue-dark); margin-bottom: 4px; }
-  .section-sub { font-size: 13px; color: var(--gray-600); margin-bottom: 28px; }
-  .card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
-  .card-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-400); margin-bottom: 16px; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
-  .field { display: flex; flex-direction: column; gap: 6px; }
-  label { font-size: 12px; font-weight: 600; color: var(--gray-600); letter-spacing: 0.02em; }
-  select, input[type="text"], input[type="number"], textarea { font-family: var(--font); font-size: 14px; padding: 10px 12px; border: 1.5px solid var(--gray-200); border-radius: 8px; background: var(--white); color: var(--gray-800); transition: border-color 0.15s; width: 100%; }
-  select:focus, input:focus, textarea:focus { outline: none; border-color: var(--blue-accent); }
-  .auto-field { background: var(--gray-100) !important; color: var(--gray-600) !important; font-family: var(--mono) !important; font-size: 13px !important; cursor: default; }
-  .instrumental-table { width: 100%; border-collapse: collapse; }
-  .instrumental-table th { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-400); padding: 8px 12px; text-align: left; border-bottom: 1.5px solid var(--gray-200); }
-  .instrumental-table td { padding: 8px 12px; border-bottom: 1px solid var(--gray-100); font-size: 13px; vertical-align: middle; }
-  .instrumental-table tr:last-child td { border-bottom: none; }
-  .qty-input { width: 70px !important; text-align: center; padding: 6px 8px !important; font-family: var(--mono) !important; font-weight: 600 !important; }
-  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 8px; font-family: var(--font); font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; }
-  .btn-primary { background: var(--blue-accent); color: var(--white); }
-  .btn-primary:hover { filter: brightness(1.1); }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-  .btn-secondary { background: var(--gray-100); color: var(--gray-800); border: 1.5px solid var(--gray-200); }
-  .btn-secondary:hover { background: var(--gray-200); }
-  .form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(11,31,58,0.6); z-index: 200; align-items: center; justify-content: center; }
-  .modal-overlay.show { display: flex; }
-  .modal { background: var(--white); border-radius: 16px; padding: 40px; max-width: 460px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-  .modal-icon { width: 64px; height: 64px; background: var(--teal-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 20px; }
-  .modal h2 { font-size: 20px; font-weight: 700; color: var(--blue-dark); margin-bottom: 8px; }
-  .modal p { font-size: 14px; color: var(--gray-600); margin-bottom: 24px; }
-  .code-display { background: var(--blue-dark); color: var(--teal); font-family: var(--mono); font-size: 28px; font-weight: 600; letter-spacing: 0.15em; padding: 16px 24px; border-radius: 10px; margin-bottom: 8px; }
-  .code-hint { font-size: 12px; color: var(--gray-400); margin-bottom: 28px; }
-  .search-box { display: flex; gap: 12px; margin-bottom: 24px; }
-  .search-box input { flex: 1; font-family: var(--mono); font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase; }
-  .status-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; }
-  .status-header { background: var(--blue-dark); color: var(--white); padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; }
-  .status-code { font-family: var(--mono); font-size: 22px; font-weight: 600; letter-spacing: 0.12em; color: var(--teal); }
-  .status-meta { font-size: 12px; color: var(--gray-400); margin-top: 4px; }
-  .status-badge { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-  .badge-enviada { background: var(--amber-light); color: var(--amber); }
-  .badge-rebuda { background: var(--blue-light); color: var(--blue-accent); }
-  .badge-empaquetant { background: #EDE9FE; color: #7C3AED; }
-  .badge-autoclave { background: var(--teal-light); color: var(--teal); }
-  .badge-llesta { background: #D1FAE5; color: #059669; }
-  .badge-entregada { background: var(--gray-100); color: var(--gray-600); }
-  .status-body { padding: 24px; }
-  .status-timeline { display: flex; margin-bottom: 24px; position: relative; }
-  .status-timeline::before { content: ''; position: absolute; top: 16px; left: 20px; right: 20px; height: 2px; background: var(--gray-200); z-index: 0; }
-  .timeline-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 1; }
-  .timeline-dot { width: 32px; height: 32px; border-radius: 50%; background: var(--gray-200); display: flex; align-items: center; justify-content: center; font-size: 14px; border: 3px solid var(--white); }
-  .timeline-dot.done { background: var(--teal); }
-  .timeline-dot.current { background: var(--blue-accent); box-shadow: 0 0 0 4px var(--blue-light); }
-  .timeline-label { font-size: 11px; font-weight: 500; color: var(--gray-400); text-align: center; line-height: 1.3; }
-  .timeline-label.done { color: var(--teal); }
-  .timeline-label.current { color: var(--blue-accent); font-weight: 600; }
-  .info-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-  .info-item label { font-size: 11px; color: var(--gray-400); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
-  .info-item span { font-size: 14px; font-weight: 500; color: var(--gray-800); }
-  .bolsas-row { display: flex; gap: 12px; margin-top: 16px; }
-  .bolsa-chip { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-  .bolsa-vapor { background: var(--blue-light); color: var(--blue-accent); }
-  .bolsa-plasma { background: #F3E8FF; color: #7C3AED; }
-  .not-found { text-align: center; padding: 48px 24px; color: var(--gray-400); }
-  .not-found .icon { font-size: 40px; margin-bottom: 12px; }
-  .loading { text-align: center; padding: 24px; color: var(--gray-400); font-size: 14px; }
-  .error-msg { background: #FEE2E2; color: #DC2626; padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:var(--font); background:var(--gray-50); color:var(--gray-800); min-height:100vh; }
+  header { background:var(--blue-dark); color:var(--white); padding:0 32px; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+  .header-brand { display:flex; align-items:center; gap:12px; }
+  .header-brand .icon { width:32px; height:32px; background:var(--blue-accent); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .header-brand h1 { font-size:15px; font-weight:600; }
+  .header-brand span { font-size:12px; color:var(--gray-400); }
+  .header-right { font-size:12px; color:var(--gray-400); }
+  .tabs { background:var(--blue-mid); padding:0 32px; display:flex; }
+  .tab { padding:14px 24px; font-size:13px; font-weight:500; color:var(--gray-400); cursor:pointer; border-bottom:3px solid transparent; transition:all 0.15s; user-select:none; }
+  .tab:hover { color:var(--white); }
+  .tab.active { color:var(--white); border-bottom-color:var(--teal); }
+  main { max-width:900px; margin:0 auto; padding:32px 24px; }
+  .panel { display:none; }
+  .panel.active { display:block; }
+  .section-title { font-size:20px; font-weight:700; color:var(--blue-dark); margin-bottom:4px; }
+  .section-sub { font-size:13px; color:var(--gray-600); margin-bottom:28px; }
+  .card { background:var(--white); border:1px solid var(--gray-200); border-radius:12px; padding:24px; margin-bottom:20px; }
+  .card-title { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--gray-400); margin-bottom:16px; }
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-grid.three { grid-template-columns:1fr 1fr 1fr; }
+  .field { display:flex; flex-direction:column; gap:6px; }
+  label { font-size:12px; font-weight:600; color:var(--gray-600); letter-spacing:0.02em; }
+  select, input[type="text"], input[type="number"], textarea { font-family:var(--font); font-size:14px; padding:10px 12px; border:1.5px solid var(--gray-200); border-radius:8px; background:var(--white); color:var(--gray-800); transition:border-color 0.15s; width:100%; }
+  select:focus, input:focus, textarea:focus { outline:none; border-color:var(--blue-accent); }
+  .auto-field { background:var(--gray-100) !important; color:var(--gray-600) !important; font-family:var(--mono) !important; font-size:13px !important; cursor:default; }
+  .instrumental-table { width:100%; border-collapse:collapse; }
+  .instrumental-table th { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:var(--gray-400); padding:8px 12px; text-align:left; border-bottom:1.5px solid var(--gray-200); }
+  .instrumental-table td { padding:8px 12px; border-bottom:1px solid var(--gray-100); font-size:13px; vertical-align:middle; }
+  .instrumental-table tr:last-child td { border-bottom:none; }
+  .qty-input { width:70px !important; text-align:center; padding:6px 8px !important; font-family:var(--mono) !important; font-weight:600 !important; }
+  .btn { display:inline-flex; align-items:center; gap:8px; padding:12px 24px; border-radius:8px; font-family:var(--font); font-size:14px; font-weight:600; cursor:pointer; border:none; transition:all 0.15s; }
+  .btn-primary { background:var(--blue-accent); color:var(--white); }
+  .btn-primary:hover:not(:disabled) { filter:brightness(1.1); }
+  .btn-primary:disabled { opacity:0.5; cursor:not-allowed; }
+  .btn-secondary { background:var(--gray-100); color:var(--gray-800); border:1.5px solid var(--gray-200); }
+  .btn-secondary:hover { background:var(--gray-200); }
+  .form-actions { display:flex; gap:12px; justify-content:flex-end; margin-top:8px; }
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(11,31,58,0.6); z-index:200; align-items:center; justify-content:center; }
+  .modal-overlay.show { display:flex; }
+  .modal { background:var(--white); border-radius:16px; padding:40px; max-width:460px; width:90%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.2); }
+  .modal-icon { width:64px; height:64px; background:var(--teal-light); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; margin:0 auto 20px; }
+  .modal h2 { font-size:20px; font-weight:700; color:var(--blue-dark); margin-bottom:8px; }
+  .modal p { font-size:14px; color:var(--gray-600); margin-bottom:24px; }
+  .code-display { background:var(--blue-dark); color:var(--teal); font-family:var(--mono); font-size:28px; font-weight:600; letter-spacing:0.15em; padding:16px 24px; border-radius:10px; margin-bottom:8px; }
+  .code-hint { font-size:12px; color:var(--gray-400); margin-bottom:28px; }
+  .search-box { display:flex; gap:12px; margin-bottom:24px; }
+  .search-box input { flex:1; font-family:var(--mono); font-size:16px; letter-spacing:0.1em; text-transform:uppercase; }
+  .status-card { background:var(--white); border:1px solid var(--gray-200); border-radius:12px; overflow:hidden; }
+  .status-header { background:var(--blue-dark); color:var(--white); padding:20px 24px; display:flex; justify-content:space-between; align-items:center; }
+  .status-code { font-family:var(--mono); font-size:22px; font-weight:600; letter-spacing:0.12em; color:var(--teal); }
+  .status-meta { font-size:12px; color:var(--gray-400); margin-top:4px; }
+  .status-badge { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; }
+  .badge-enviada { background:var(--amber-light); color:var(--amber); }
+  .badge-rebuda { background:var(--blue-light); color:var(--blue-accent); }
+  .badge-empaquetant { background:#EDE9FE; color:#7C3AED; }
+  .badge-autoclave { background:var(--teal-light); color:var(--teal); }
+  .badge-llesta { background:#D1FAE5; color:#059669; }
+  .badge-entregada { background:var(--gray-100); color:var(--gray-600); }
+  .status-body { padding:24px; }
+  .status-timeline { display:flex; margin-bottom:24px; position:relative; }
+  .status-timeline::before { content:''; position:absolute; top:16px; left:20px; right:20px; height:2px; background:var(--gray-200); z-index:0; }
+  .timeline-step { flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; position:relative; z-index:1; }
+  .timeline-dot { width:32px; height:32px; border-radius:50%; background:var(--gray-200); display:flex; align-items:center; justify-content:center; font-size:14px; border:3px solid var(--white); }
+  .timeline-dot.done { background:var(--teal); }
+  .timeline-dot.current { background:var(--blue-accent); box-shadow:0 0 0 4px var(--blue-light); }
+  .timeline-label { font-size:11px; font-weight:500; color:var(--gray-400); text-align:center; line-height:1.3; }
+  .timeline-label.done { color:var(--teal); }
+  .timeline-label.current { color:var(--blue-accent); font-weight:600; }
+  .info-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:20px; }
+  .info-item label { font-size:11px; color:var(--gray-400); display:block; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.06em; }
+  .info-item span { font-size:14px; font-weight:500; color:var(--gray-800); }
+  .bolsas-row { display:flex; gap:12px; margin-top:16px; }
+  .bolsa-chip { padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px; }
+  .bolsa-vapor { background:var(--blue-light); color:var(--blue-accent); }
+  .bolsa-plasma { background:#F3E8FF; color:#7C3AED; }
+  .not-found { text-align:center; padding:48px 24px; color:var(--gray-400); }
+  .not-found .icon { font-size:40px; margin-bottom:12px; }
+  .loading { text-align:center; padding:32px; color:var(--gray-400); font-size:14px; }
+  .error-msg { background:#FEE2E2; color:#DC2626; padding:12px 16px; border-radius:8px; font-size:13px; margin-bottom:16px; }
+  .empty-serveis { background:var(--amber-light); color:var(--amber); padding:12px 16px; border-radius:8px; font-size:13px; margin-bottom:16px; }
 </style>
 </head>
 <body>
-
 <header>
   <div class="header-brand">
     <div class="icon">🏥</div>
@@ -108,34 +108,27 @@
   </div>
   <div class="header-right" id="headerDate"></div>
 </header>
-
 <div class="tabs">
   <div class="tab active" onclick="switchTab('nova')">+ Nova petició</div>
   <div class="tab" onclick="switchTab('consulta')">🔍 Consultar petició</div>
 </div>
-
 <main>
   <div class="panel active" id="panel-nova">
     <div class="section-title">Nova petició d'esterilització</div>
     <div class="section-sub">Completa les dades i selecciona el material a enviar.</div>
     <div id="error-nova"></div>
-
     <div class="card">
       <div class="card-title">Origen de la petició</div>
       <div class="form-grid">
         <div class="field">
-          <label>Centre / Edifici</label>
-          <select id="sel-centre" onchange="updatePlanta()">
-            <option value="">— Selecciona —</option>
-            <option value="hmi">Hospital Materno Infantil</option>
-            <option value="hg">Hospital General</option>
-            <option value="ce">Consultes Externes / CAP</option>
-            <option value="transversal">Serveis Transversals</option>
+          <label>Centre</label>
+          <select id="sel-centre" onchange="updateServeis()">
+            <option value="">— Carregant centres... —</option>
           </select>
         </div>
         <div class="field">
-          <label>Planta / Servei</label>
-          <select id="sel-planta" onchange="updateAutoFields()">
+          <label>Servei / Planta</label>
+          <select id="sel-servei" onchange="updateAutoFields()">
             <option value="">— Selecciona primer el centre —</option>
           </select>
         </div>
@@ -146,7 +139,7 @@
           <input type="text" id="auto-ext" class="auto-field" readonly placeholder="Automàtic">
         </div>
         <div class="field">
-          <label>Codi CFH</label>
+          <label>Codi GFH</label>
           <input type="text" id="auto-cfh" class="auto-field" readonly placeholder="Automàtic">
         </div>
         <div class="field">
@@ -155,7 +148,6 @@
         </div>
       </div>
     </div>
-
     <div class="card">
       <div class="card-title">Material a esterilitzar</div>
       <table class="instrumental-table">
@@ -163,12 +155,10 @@
         <tbody id="instrumental-body"></tbody>
       </table>
     </div>
-
     <div class="card">
       <div class="card-title">Observacions</div>
       <textarea id="obs" rows="3" placeholder="Observacions opcionals sobre la petició..."></textarea>
     </div>
-
     <div class="form-actions">
       <button class="btn btn-secondary" onclick="resetForm()">Netejar</button>
       <button class="btn btn-primary" id="btn-enviar" onclick="enviarPeticio()">✓ Enviar petició</button>
@@ -198,59 +188,12 @@
 </div>
 
 <script>
-const SUPABASE_URL = 'https://cnfkwmswlnmhtflfumdn.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuZmt3bXN3bG5taHRmbGZ1bWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNTkzNDYsImV4cCI6MjA5NjczNTM0Nn0.cJFq5vqV4at5_MDpJWfV5fDxchm9vfgNc1bSkCcduiw';
+const SB_URL  = 'https://cnfkwmswlnmhtflfumdn.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuZmt3bXN3bG5taHRmbGZ1bWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNTkzNDYsImV4cCI6MjA5NjczNTM0Nn0.cJFq5vqV4at5_MDpJWfV5fDxchm9vfgNc1bSkCcduiw';
+const H = { 'Content-Type':'application/json', 'apikey':SB_KEY, 'Authorization':`Bearer ${SB_KEY}` };
 
-const HEADERS = {
-  'Content-Type': 'application/json',
-  'apikey': SUPABASE_ANON,
-  'Authorization': `Bearer ${SUPABASE_ANON}`
-};
-
-async function sbGet(path) {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers: HEADERS });
-  return r.json();
-}
-
-async function sbPost(table, body) {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
-    method: 'POST',
-    headers: { ...HEADERS, 'Prefer': 'return=representation' },
-    body: JSON.stringify(body)
-  });
-  return r.json();
-}
-
-const CENTRES = {
-  hmi: { nom: "Hospital Materno Infantil", plantes: [
-    { id:"hmi_p5",      nom:"Planta 5",         ext:"4250", cfh:"4110" },
-    { id:"hmi_p7",      nom:"Planta 7",          ext:"4270", cfh:"4112" },
-    { id:"hmi_p8",      nom:"Planta 8",          ext:"4280", cfh:"4113" },
-    { id:"hmi_p9",      nom:"Planta 9",          ext:"4290", cfh:"4114" },
-    { id:"hmi_p10",     nom:"Planta 10",         ext:"4300", cfh:"4115" },
-    { id:"hmi_uci_ped", nom:"UCI Pediàtrica",    ext:"4310", cfh:"4120" },
-    { id:"hmi_neonatal",nom:"UCI Neonatal",      ext:"4320", cfh:"4121" },
-    { id:"hmi_comacasa",nom:"Comacasa",          ext:"4325", cfh:"4122" },
-    { id:"hmi_urg",     nom:"Urgències",         ext:"4330", cfh:"4130" },
-  ]},
-  hg: { nom: "Hospital General", plantes: [
-    { id:"hg_p1",  nom:"Planta 1",   ext:"3110", cfh:"3010" },
-    { id:"hg_p2",  nom:"Planta 2",   ext:"3120", cfh:"3011" },
-    { id:"hg_p3",  nom:"Planta 3",   ext:"3130", cfh:"3012" },
-    { id:"hg_uci", nom:"UCI",        ext:"3200", cfh:"3020" },
-    { id:"hg_urg", nom:"Urgències",  ext:"3300", cfh:"3030" },
-    { id:"hg_qx",  nom:"Quiròfan",   ext:"3400", cfh:"3040" },
-  ]},
-  ce: { nom: "Consultes Externes / CAP", plantes: [
-    { id:"ce_horta",    nom:"CAP Horta",       ext:"936857514", cfh:"5010" },
-    { id:"ce_sandreu",  nom:"CAP Sant Andreu", ext:"936589624", cfh:"5780" },
-  ]},
-  transversal: { nom: "Serveis Transversals", plantes: [
-    { id:"tr_farm",  nom:"Farmàcia",              ext:"9110", cfh:"9010" },
-    { id:"tr_inv",   nom:"Institut Investigació", ext:"9120", cfh:"9011" },
-    { id:"tr_radio", nom:"Radiologia",            ext:"9130", cfh:"9012" },
-  ]}
-};
+const get  = p => fetch(`${SB_URL}/rest/v1/${p}`, {headers:H}).then(r=>r.json());
+const post = (t,b) => fetch(`${SB_URL}/rest/v1/${t}`, {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify(b)}).then(r=>r.json());
 
 const INSTRUMENTAL = [
   "Pinça de Kocher","Pinça de Halsted","Pinça de Backhaus",
@@ -263,16 +206,18 @@ const INSTRUMENTAL = [
 ];
 
 const ESTATS = [
-  { label:"Enviada",           icon:"📤", cls:"badge-enviada" },
-  { label:"Rebuda",            icon:"📥", cls:"badge-rebuda" },
-  { label:"Empaquetant",       icon:"📦", cls:"badge-empaquetant" },
-  { label:"En autoclau",       icon:"🔬", cls:"badge-autoclave" },
-  { label:"Llesta per sortir", icon:"✅", cls:"badge-llesta" },
-  { label:"Entregada",         icon:"🏥", cls:"badge-entregada" },
+  {label:"Enviada",icon:"📤",cls:"badge-enviada"},
+  {label:"Rebuda",icon:"📥",cls:"badge-rebuda"},
+  {label:"Empaquetant",icon:"📦",cls:"badge-empaquetant"},
+  {label:"En autoclau",icon:"🔬",cls:"badge-autoclave"},
+  {label:"Llesta per sortir",icon:"✅",cls:"badge-llesta"},
+  {label:"Entregada",icon:"🏥",cls:"badge-entregada"},
 ];
 const ESTAT_KEY = ["enviada","rebuda","empaquetant","autoclave","llesta","entregada"];
 
-document.addEventListener('DOMContentLoaded', () => { renderDate(); renderInstrumental(); });
+let serveisData = []; // tots els serveis carregats
+
+document.addEventListener('DOMContentLoaded', () => { renderDate(); renderInstrumental(); loadServeis(); });
 
 function renderDate() {
   const now = new Date();
@@ -292,22 +237,44 @@ function renderInstrumental() {
     </tr>`).join('');
 }
 
-function updatePlanta() {
-  const key = document.getElementById('sel-centre').value;
-  const sel = document.getElementById('sel-planta');
+async function loadServeis() {
+  try {
+    // Llegim de la vista que combina serveis_peticions + serveis
+    const data = await get('serveis_peticions_view?select=*');
+    if (!Array.isArray(data) || !data.length) {
+      document.getElementById('sel-centre').innerHTML = '<option value="">— Sense serveis configurats —</option>';
+      document.getElementById('error-nova').innerHTML = '<div class="empty-serveis">⚠️ No hi ha serveis configurats. Contacta amb l\'administrador.</div>';
+      return;
+    }
+    serveisData = data;
+    // Extreure centres únics
+    const centres = [...new Set(data.map(s => s.centre))].sort();
+    document.getElementById('sel-centre').innerHTML =
+      '<option value="">— Selecciona centre —</option>' +
+      centres.map(c => `<option value="${c}">${c}</option>`).join('');
+  } catch(e) {
+    document.getElementById('sel-centre').innerHTML = '<option value="">— Error carregant —</option>';
+  }
+}
+
+function updateServeis() {
+  const centre = document.getElementById('sel-centre').value;
+  const sel = document.getElementById('sel-servei');
   document.getElementById('auto-ext').value = '';
   document.getElementById('auto-cfh').value = '';
-  if (!key) { sel.innerHTML = '<option value="">— Selecciona primer el centre —</option>'; return; }
-  sel.innerHTML = '<option value="">— Selecciona planta/servei —</option>' +
-    CENTRES[key].plantes.map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
+  if (!centre) { sel.innerHTML = '<option value="">— Selecciona primer el centre —</option>'; return; }
+  const filtered = serveisData.filter(s => s.centre === centre);
+  sel.innerHTML = '<option value="">— Selecciona servei —</option>' +
+    filtered.map(s => `<option value="${s.id}">${s.servei_nom}</option>`).join('');
 }
 
 function updateAutoFields() {
-  const key = document.getElementById('sel-centre').value;
-  const pid = document.getElementById('sel-planta').value;
-  if (!key || !pid) return;
-  const p = CENTRES[key].plantes.find(x => x.id === pid);
-  if (p) { document.getElementById('auto-ext').value = p.ext; document.getElementById('auto-cfh').value = p.cfh; }
+  const id = parseInt(document.getElementById('sel-servei').value);
+  const s = serveisData.find(x => x.id === id);
+  if (s) {
+    document.getElementById('auto-ext').value = s.extensio || '—';
+    document.getElementById('auto-cfh').value = s.GFH || s.cfh || '—';
+  }
 }
 
 function generateCode() {
@@ -319,21 +286,20 @@ function generateCode() {
 }
 
 async function enviarPeticio() {
-  const centreKey = document.getElementById('sel-centre').value;
-  const plantaId  = document.getElementById('sel-planta').value;
+  const centre   = document.getElementById('sel-centre').value;
+  const serveiId = document.getElementById('sel-servei').value;
   const solicitant = document.getElementById('solicitant').value.trim();
   const errorDiv = document.getElementById('error-nova');
   errorDiv.innerHTML = '';
 
-  if (!centreKey || !plantaId || !solicitant) {
-    errorDiv.innerHTML = '<div class="error-msg">Si us plau, omple centre, planta/servei i nom del sol·licitant.</div>';
+  if (!centre || !serveiId || !solicitant) {
+    errorDiv.innerHTML = '<div class="error-msg">Si us plau, omple centre, servei i nom del sol·licitant.</div>';
     return;
   }
 
-  const planta = CENTRES[centreKey].plantes.find(p => p.id === plantaId);
+  const servei = serveisData.find(s => s.id === parseInt(serveiId));
   const material = INSTRUMENTAL.map(item => ({
-    nom: item,
-    qty: parseInt(document.getElementById('qty_'+item.replace(/\W/g,'_')).value) || 0
+    nom: item, qty: parseInt(document.getElementById('qty_'+item.replace(/\W/g,'_')).value)||0
   })).filter(m => m.qty > 0);
 
   if (!material.length) {
@@ -342,51 +308,42 @@ async function enviarPeticio() {
   }
 
   const btn = document.getElementById('btn-enviar');
-  btn.disabled = true;
-  btn.textContent = 'Enviant...';
+  btn.disabled = true; btn.textContent = 'Enviant...';
 
   const codi = generateCode();
   try {
-    const res = await sbPost('peticions', {
+    const res = await post('peticions', {
       codi,
-      centre_nom:   CENTRES[centreKey].nom,
-      planta_nom:   planta.nom,
-      extensio:     planta.ext,
-      cfh:          planta.cfh,
+      centre_nom:   servei.centre,
+      planta_nom:   servei.servei_nom,
+      extensio:     servei.extensio || '',
+      cfh:          servei.GFH || servei.cfh || '',
       solicitant,
       observacions: document.getElementById('obs').value,
       estat:        'enviada'
     });
 
-    if (res.error || (Array.isArray(res) && res[0]?.code)) {
-      throw new Error(res.message || res[0]?.message || 'Error desconegut');
-    }
+    if (!Array.isArray(res) || res[0]?.code) throw new Error(res[0]?.message || 'Error desconegut');
 
-    const peticioId = Array.isArray(res) ? res[0].id : res.id;
-    await sbPost('peticio_material', material.map(m => ({
-      peticio_id:   peticioId,
-      material_nom: m.nom,
-      quantitat:    m.qty
+    const peticioId = res[0].id;
+    await post('peticio_material', material.map(m => ({
+      peticio_id: peticioId, material_nom: m.nom, quantitat: m.qty
     })));
 
     document.getElementById('modal-code').textContent = codi;
     document.getElementById('modal').classList.add('show');
   } catch(e) {
-    errorDiv.innerHTML = `<div class="error-msg">Error en enviar la petició: ${e.message}</div>`;
+    errorDiv.innerHTML = `<div class="error-msg">Error: ${e.message}</div>`;
   } finally {
-    btn.disabled = false;
-    btn.textContent = '✓ Enviar petició';
+    btn.disabled = false; btn.textContent = '✓ Enviar petició';
   }
 }
 
-function closeModal() {
-  document.getElementById('modal').classList.remove('show');
-  resetForm();
-}
+function closeModal() { document.getElementById('modal').classList.remove('show'); resetForm(); }
 
 function resetForm() {
   document.getElementById('sel-centre').value = '';
-  document.getElementById('sel-planta').innerHTML = '<option value="">— Selecciona primer el centre —</option>';
+  document.getElementById('sel-servei').innerHTML = '<option value="">— Selecciona primer el centre —</option>';
   document.getElementById('auto-ext').value = '';
   document.getElementById('auto-cfh').value = '';
   document.getElementById('solicitant').value = '';
@@ -411,70 +368,49 @@ async function buscarPeticio() {
   const codi = document.getElementById('search-code').value.trim().toUpperCase();
   const area = document.getElementById('result-area');
   if (!codi) return;
-
   area.innerHTML = '<div class="loading">Cercant...</div>';
-
   try {
-    const data = await sbGet(`peticions?codi=eq.${codi}&select=*`);
+    const data = await get(`peticions?codi=eq.${codi}&select=*`);
     if (!data.length) {
       area.innerHTML = `<div class="not-found"><div class="icon">🔍</div><p>No s'ha trobat cap petició amb el codi <strong>${codi}</strong>.</p></div>`;
       return;
     }
     const p = data[0];
-    const material = await sbGet(`peticio_material?peticio_id=eq.${p.id}&select=*`);
-    renderResultat(p, material);
-  } catch(e) {
-    area.innerHTML = `<div class="error-msg">Error en cercar: ${e.message}</div>`;
-  }
-}
-
-function renderResultat(p, material) {
-  const area = document.getElementById('result-area');
-  const estatIdx = ESTAT_KEY.indexOf(p.estat);
-  const estat = ESTATS[estatIdx] || ESTATS[0];
-
-  const timeline = ESTATS.map((e, i) => {
-    const cls = i < estatIdx ? 'done' : i === estatIdx ? 'current' : '';
-    return `<div class="timeline-step">
-      <div class="timeline-dot ${cls}">${i < estatIdx ? '✓' : e.icon}</div>
-      <div class="timeline-label ${cls}">${e.label}</div>
-    </div>`;
-  }).join('');
-
-  const bolsas = (p.plasma > 0 || p.vapor > 0) ? `
-    <div class="bolsas-row">
-      ${p.vapor  > 0 ? `<div class="bolsa-chip bolsa-vapor">💨 Vapor: ${p.vapor} bossa${p.vapor>1?'es':''}</div>` : ''}
-      ${p.plasma > 0 ? `<div class="bolsa-chip bolsa-plasma">⚡ Plasma: ${p.plasma} bossa${p.plasma>1?'es':''}</div>` : ''}
+    const material = await get(`peticio_material?peticio_id=eq.${p.id}&select=*`);
+    const estatIdx = ESTAT_KEY.indexOf(p.estat);
+    const estat = ESTATS[estatIdx] || ESTATS[0];
+    const timeline = ESTATS.map((e,i) => {
+      const cls = i < estatIdx ? 'done' : i === estatIdx ? 'current' : '';
+      return `<div class="timeline-step"><div class="timeline-dot ${cls}">${i<estatIdx?'✓':e.icon}</div><div class="timeline-label ${cls}">${e.label}</div></div>`;
+    }).join('');
+    const bolsas = (p.plasma>0||p.vapor>0) ? `<div class="bolsas-row">
+      ${p.vapor>0?`<div class="bolsa-chip bolsa-vapor">💨 Vapor: ${p.vapor}</div>`:''}
+      ${p.plasma>0?`<div class="bolsa-chip bolsa-plasma">⚡ Plasma: ${p.plasma}</div>`:''}
     </div>` : '';
-
-  const dataFmt = new Date(p.created_at).toLocaleString('ca-ES');
-
-  area.innerHTML = `
-    <div class="status-card">
-      <div class="status-header">
-        <div>
-          <div class="status-code">${p.codi}</div>
-          <div class="status-meta">${p.centre_nom} · ${p.planta_nom} · ${dataFmt}</div>
+    area.innerHTML = `
+      <div class="status-card">
+        <div class="status-header">
+          <div><div class="status-code">${p.codi}</div><div class="status-meta">${p.centre_nom} · ${p.planta_nom} · ${new Date(p.created_at).toLocaleString('ca-ES')}</div></div>
+          <div class="status-badge ${estat.cls}">${estat.icon} ${estat.label}</div>
         </div>
-        <div class="status-badge ${estat.cls}">${estat.icon} ${estat.label}</div>
-      </div>
-      <div class="status-body">
-        <div class="status-timeline">${timeline}</div>
-        <div class="info-row">
-          <div class="info-item"><label>Sol·licitant</label><span>${p.solicitant}</span></div>
-          <div class="info-item"><label>Material enviat</label><span>${material.length} tipus</span></div>
-          <div class="info-item"><label>Estat</label><span>${estat.icon} ${estat.label}</span></div>
+        <div class="status-body">
+          <div class="status-timeline">${timeline}</div>
+          <div class="info-row">
+            <div class="info-item"><label>Sol·licitant</label><span>${p.solicitant}</span></div>
+            <div class="info-item"><label>Material enviat</label><span>${material.length} tipus</span></div>
+            <div class="info-item"><label>Estat</label><span>${estat.icon} ${estat.label}</span></div>
+          </div>
+          <table class="instrumental-table">
+            <thead><tr><th>Material</th><th>Quantitat</th></tr></thead>
+            <tbody>${material.map(m=>`<tr><td>${m.material_nom}</td><td style="font-family:var(--mono);font-weight:600;">${m.quantitat}</td></tr>`).join('')}</tbody>
+          </table>
+          ${bolsas}
+          ${p.observacions?`<div style="margin-top:16px;padding:12px 16px;background:var(--amber-light);border-radius:8px;font-size:13px;color:var(--amber);"><strong>Obs:</strong> ${p.observacions}</div>`:''}
         </div>
-        <table class="instrumental-table">
-          <thead><tr><th>Material</th><th>Quantitat</th></tr></thead>
-          <tbody>
-            ${material.map(m => `<tr><td>${m.material_nom}</td><td style="font-family:var(--mono);font-weight:600;">${m.quantitat}</td></tr>`).join('')}
-          </tbody>
-        </table>
-        ${bolsas}
-        ${p.observacions ? `<div style="margin-top:16px;padding:12px 16px;background:var(--amber-light);border-radius:8px;font-size:13px;color:var(--amber);"><strong>Observacions:</strong> ${p.observacions}</div>` : ''}
-      </div>
-    </div>`;
+      </div>`;
+  } catch(e) {
+    area.innerHTML = `<div class="error-msg">Error: ${e.message}</div>`;
+  }
 }
 </script>
 </body>
