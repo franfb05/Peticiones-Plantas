@@ -272,27 +272,28 @@ function renderDate() {
 
 function renderInstrumental() {
   const container = document.getElementById('instrumental-container');
+  if (!container) return;
   let html = '<div class="cats-wrapper">';
   INSTRUMENTAL.forEach(cat => {
     if (!cat.items.length) return;
-    html += `<div class="cat-block">`;
-      <div class="cat-header">${cat.cat}</div>
-      <div class="cat-grid">`;
+    html += '<div class="cat-block">';
+    html += '<div class="cat-header">' + cat.cat + '</div>';
+    html += '<div class="cat-grid">';
     cat.items.forEach(item => {
       if (item === '__custom__') {
-        html += `<div class="cat-item-custom">
-          <div class="custom-row" id="custom-rows"></div>
-          <button type="button" class="btn-add-other" onclick="addOtherRow()">+ Afegir material</button>
-        </div>`;
+        html += '<div class="cat-item-custom">';
+        html += '<div class="custom-row" id="custom-rows"></div>';
+        html += '<button type="button" class="btn-add-other" onclick="addOtherRow()">+ Afegir material</button>';
+        html += '</div>';
         return;
       }
       const key = (cat.cat + '_' + item).replace(/\W/g,'_');
-      html += `<div class="cat-item">
-        <span class="cat-item-nom">${item}</span>
-        <input type="number" class="qty-input" min="0" max="99" value="0" id="qty_${key}">
-      </div>`;
+      html += '<div class="cat-item">';
+      html += '<span class="cat-item-nom">' + item + '</span>';
+      html += '<input type="number" class="qty-input" min="0" max="99" value="0" id="qty_' + key + '">';
+      html += '</div>';
     });
-    html += `</div></div>`;
+    html += '</div></div>';
   });
   html += '</div>';
   container.innerHTML = html;
