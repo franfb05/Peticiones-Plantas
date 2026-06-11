@@ -196,13 +196,51 @@ const get  = p => fetch(`${SB_URL}/rest/v1/${p}`, {headers:H}).then(r=>r.json())
 const post = (t,b) => fetch(`${SB_URL}/rest/v1/${t}`, {method:'POST', headers:{...H,'Prefer':'return=representation'}, body:JSON.stringify(b)}).then(r=>r.json());
 
 const INSTRUMENTAL = [
-  "Pinça de Kocher","Pinça de Halsted","Pinça de Backhaus",
-  "Tisora de Mayo","Tisora de Metzenbaum","Portaagulles de Mayo-Hegar",
-  "Bisturí mànec nº 3","Bisturí mànec nº 4",
-  "Separador de Farabeuf","Separador de Langenbeck",
-  "Cànula d'aspiració","Pinça de dissecció amb dents","Pinça de dissecció sense dents",
-  "Abaixallengua metàl·lic","Espècul vaginal","Pinça de biopsia",
-  "Agulla de Veress","Trocàcar 5mm","Trocàcar 10mm","Separador d'abdominals"
+  { cat: "Inst. embolicat", items: [
+    "Safata","Estilet","S. acanalada","Mànec bisturí","Lleva agrafes",
+    "Mosquit","Porta","Pinces","Tisores","P. biòpsia","P. dissecció",
+    "P. Pozzi","P. Duval","P. Allis","P. Bengolea","P. Magill",
+    "P. Kocher","P. Pintar","P. Foester","P. uterines","P. Adson","P. Pean",
+    "Espècul","Espàtules","Histeròmetre","Legres","Dilatadors"
+  ]},
+  { cat: "Equips", items: [
+    "S. cures","S. punts","S. venotomia","S. Cateterisme","S. Jonathan","S. urodinàmia"
+  ]},
+  { cat: "Diversos", items: [
+    "Vàlvules","Pistola biòpsia","Electr. ases/boles","Càmeres","Pneumotac",
+    "Nebulitzador","Filtres","Tubuladores","Mascareta ambú","Mascareta laringia",
+    "Ambú","Peça en Y-T","Connexions","Humidificador","Esmarch","Sondes","Guies",
+    "Material respirador"
+  ]},
+  { cat: "Baixa temperatura", items: [
+    "Tenòmetre","Sensor PIC","Cable marcapassos","Pala laringo","Fonendoscopi",
+    "S. manom. esofàgica","S. manom. anorectal","S. biòpsia","Broquets",
+    "Guies intubar","S. Gullón"
+  ]},
+  { cat: "Cambres", items: [
+    "Safata","Gots","Plats","Palangana","Culleretes","Forquilla","Ganivet",
+    "Culleres","Gibrella","Ampolla vidre","Ampolla diüresi","Diversos"
+  ]},
+  { cat: "Laboratori", items: [
+    "Farmàcia","Pipetes","Puntes","Eppendorf","Caixes","Pots col·liri",
+    "Tapes gomes","Ampolles"
+  ]},
+  { cat: "Tèxtil", items: [
+    "B. elàstiques","Benes 10x10","Benes 5x5"
+  ]},
+  { cat: "Altres", items: [] },
+  { cat: "Urg. Q AG", items: [
+    "Amputació","Àpex","Ap. laparoscòpia","By-pass","C. nasal","C. toràcica",
+    "C. cures","Citoscopi","Drill","Especial vascular","Esofagosc. rígid",
+    "Làparo","Laparoscòpia","Maxi-lofacial","Maxi-lofacial-oral","Neurocirurgia",
+    "Òptica 0°-30°-70°","Percath","Pinces biòpsia uro","Pl. Tarma Leibinger",
+    "Cargol Karllis","Portes laparoscòpia","Proctologia","Resector urologia",
+    "Ungla d'Albarran"
+  ]},
+  { cat: "Urg. Q AMI", items: [
+    "Cesària","Raspatge","Abdominal","Supl. abdominal","Làparo base",
+    "Petita cirurgia","FIV","Part","Venotomia","Material embossat"
+  ]}
 ];
 
 const ESTATS = [
@@ -228,13 +266,19 @@ function renderDate() {
 }
 
 function renderInstrumental() {
-  document.getElementById('instrumental-body').innerHTML = INSTRUMENTAL.map(item => `
-    <tr>
-      <td>${item}</td>
-      <td style="text-align:center;">
-        <input type="number" class="qty-input" min="0" max="99" value="0" id="qty_${item.replace(/\W/g,'_')}">
-      </td>
-    </tr>`).join('');
+  let html = '';
+  INSTRUMENTAL.forEach(cat => {
+    if (!cat.items.length) return;
+    html += `<tr><td colspan="2" style="background:var(--gray-100);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray-400);padding:8px 12px;">${cat.cat}</td></tr>`;
+    cat.items.forEach(item => {
+      const key = (cat.cat + '_' + item).replace(/\W/g,'_');
+      html += `<tr>
+        <td style="padding-left:20px;">${item}</td>
+        <td style="text-align:center;"><input type="number" class="qty-input" min="0" max="99" value="0" id="qty_${key}"></td>
+      </tr>`;
+    });
+  });
+  document.getElementById('instrumental-body').innerHTML = html;
 }
 
 async function loadServeis() {
@@ -298,9 +342,14 @@ async function enviarPeticio() {
   }
 
   const servei = serveisData.find(s => s.id === parseInt(serveiId));
-  const material = INSTRUMENTAL.map(item => ({
-    nom: item, qty: parseInt(document.getElementById('qty_'+item.replace(/\W/g,'_')).value)||0
-  })).filter(m => m.qty > 0);
+  const material = [];
+  INSTRUMENTAL.forEach(cat => {
+    cat.items.forEach(item => {
+      const key = (cat.cat + '_' + item).replace(/\W/g,'_');
+      const qty = parseInt(document.getElementById('qty_'+key)?.value)||0;
+      if (qty > 0) material.push({ nom: cat.cat + ' · ' + item, qty });
+    });
+  });
 
   if (!material.length) {
     errorDiv.innerHTML = '<div class="error-msg">Afegeix almenys un material amb quantitat > 0.</div>';
