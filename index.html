@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peticions d'Esterilització — Plantes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --blue-dark: #0B1F3A;
+    --blue-mid: #1A3A5C;
+    --blue-accent: #1D6FA4;
+    --blue-light: #E8F2FA;
+    --teal: #0D9488;
+    --teal-light: #CCFBF1;
+    --amber: #D97706;
+    --amber-light: #FEF3C7;
+    --red: #DC2626;
+    --red-light: #FEE2E2;
+    --gray-50: #F8FAFC;
+    --gray-100: #F1F5F9;
+    --gray-200: #E2E8F0;
+    --gray-400: #94A3B8;
+    --gray-600: #475569;
+    --gray-800: #1E293B;
+    --white: #FFFFFF;
+    --font: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--gray-50);
+    color: var(--gray-800);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--blue-dark);
+    color: var(--white);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-brand .icon {
+    width: 32px; height: 32px;
+    background: var(--blue-accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  .header-brand h1 {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .header-brand span {
+    font-size: 12px;
+    color: var(--gray-400);
+    font-weight: 400;
+  }
+
+  .header-right {
+    font-size: 12px;
+    color: var(--gray-400);
+  }
+
+  /* TABS */
+  .tabs {
+    background: var(--blue-mid);
+    padding: 0 32px;
+    display: flex;
+    gap: 0;
+  }
+
+  .tab {
+    padding: 14px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-400);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .tab:hover { color: var(--white); }
+  .tab.active {
+    color: var(--white);
+    border-bottom-color: var(--teal);
+  }
+
+  /* MAIN */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  /* PANEL */
+  .panel {
+    display: none;
+  }
+  .panel.active { display: block; }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--blue-dark);
+    margin-bottom: 4px;
+  }
+  .section-sub {
+    font-size: 13px;
+    color: var(--gray-600);
+    margin-bottom: 28px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gray-400);
+    margin-bottom: 16px;
+  }
+
+  /* FORM GRID */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .form-grid.full { grid-template-columns: 1fr; }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-600);
+    letter-spacing: 0.02em;
+  }
+
+  select, input[type="text"], input[type="number"], textarea {
+    font-family: var(--font);
+    font-size: 14px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--gray-800);
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  select:focus, input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--blue-accent);
+  }
+
+  .auto-field {
+    background: var(--gray-100) !important;
+    color: var(--gray-600) !important;
+    font-family: var(--mono) !important;
+    font-size: 13px !important;
+    cursor: default;
+  }
+
+  /* INSTRUMENTAL TABLE */
+  .instrumental-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .instrumental-table th {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-400);
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1.5px solid var(--gray-200);
+  }
+
+  .instrumental-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  .instrumental-table tr:last-child td { border-bottom: none; }
+
+  .qty-input {
+    width: 70px !important;
+    text-align: center;
+    padding: 6px 8px !important;
+    font-family: var(--mono) !important;
+    font-weight: 600 !important;
+  }
+
+  .qty-input::-webkit-inner-spin-button { opacity: 1; }
+
+  /* SOLICITANT */
+  .solicitant-input {
+    font-size: 14px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    width: 100%;
+    font-family: var(--font);
+  }
+
+  /* BTN */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+
+  .btn-primary {
+    background: var(--blue-accent);
+    color: var(--white);
+  }
+  .btn-primary:hover { background: #1559883; filter: brightness(1.1); }
+
+  .btn-secondary {
+    background: var(--gray-100);
+    color: var(--gray-800);
+    border: 1.5px solid var(--gray-200);
+  }
+  .btn-secondary:hover { background: var(--gray-200); }
+
+  .btn-teal {
+    background: var(--teal);
+    color: var(--white);
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+
+  /* SUCCESS MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(11,31,58,0.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.show { display: flex; }
+
+  .modal {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 460px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+
+  .modal-icon {
+    width: 64px; height: 64px;
+    background: var(--teal-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 20px;
+  }
+
+  .modal h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--blue-dark);
+    margin-bottom: 8px;
+  }
+
+  .modal p {
+    font-size: 14px;
+    color: var(--gray-600);
+    margin-bottom: 24px;
+  }
+
+  .code-display {
+    background: var(--blue-dark);
+    color: var(--teal);
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    padding: 16px 24px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+
+  .code-hint {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-bottom: 28px;
+  }
+
+  /* CONSULTA PANEL */
+  .search-box {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .search-box input {
+    flex: 1;
+    font-family: var(--mono);
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* STATUS CARD */
+  .status-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .status-header {
+    background: var(--blue-dark);
+    color: var(--white);
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status-code {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+  }
+
+  .status-meta {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-top: 4px;
+  }
+
+  .status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .badge-sent { background: var(--amber-light); color: var(--amber); }
+  .badge-received { background: var(--blue-light); color: var(--blue-accent); }
+  .badge-packaging { background: #EDE9FE; color: #7C3AED; }
+  .badge-autoclave { background: var(--teal-light); color: var(--teal); }
+  .badge-ready { background: #D1FAE5; color: #059669; }
+  .badge-delivered { background: var(--gray-100); color: var(--gray-600); }
+
+  .status-body { padding: 24px; }
+
+  .status-timeline {
+    display: flex;
+    gap: 0;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .status-timeline::before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background: var(--gray-200);
+    z-index: 0;
+  }
+
+  .timeline-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .timeline-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--gray-200);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    border: 3px solid var(--white);
+  }
+
+  .timeline-dot.done { background: var(--teal); }
+  .timeline-dot.current { background: var(--blue-accent); box-shadow: 0 0 0 4px var(--blue-light); }
+
+  .timeline-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--gray-400);
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .timeline-label.done { color: var(--teal); }
+  .timeline-label.current { color: var(--blue-accent); font-weight: 600; }
+
+  .info-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .info-item label {
+    font-size: 11px;
+    color: var(--gray-400);
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .info-item span {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-800);
+  }
+
+  .bolsas-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .bolsa-chip {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .bolsa-vapor { background: var(--blue-light); color: var(--blue-accent); }
+  .bolsa-plasma { background: #F3E8FF; color: #7C3AED; }
+
+  .not-found {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--gray-400);
+  }
+
+  .not-found .icon { font-size: 40px; margin-bottom: 12px; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <div class="icon">🏥</div>
+    <div>
+      <h1>Esterilització — Plantes i Consultes</h1>
+      <span>Gestió de peticions</span>
+    </div>
+  </div>
+  <div class="header-right" id="headerDate"></div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('nova')">+ Nova petició</div>
+  <div class="tab" onclick="switchTab('consulta')">🔍 Consultar petició</div>
+</div>
+
+<main>
+
+  <!-- PANEL: NOVA PETICIÓ -->
+  <div class="panel active" id="panel-nova">
+    <div class="section-title">Nova petició d'esterilització</div>
+    <div class="section-sub">Completa les dades i selecciona el material a enviar.</div>
+
+    <!-- ORIGEN -->
+    <div class="card">
+      <div class="card-title">Origen de la petició</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Centre / Edifici</label>
+          <select id="sel-centre" onchange="updatePlanta()">
+            <option value="">— Selecciona —</option>
+            <option value="hmi">Hospital Materno Infantil</option>
+            <option value="hg">Hospital General</option>
+            <option value="ce">Consultes Externes</option>
+            <option value="cap_horta">CAP Horta</option>
+            <option value="sant_andreu">Sant Andreu</option>
+            <option value="transversal">Serveis Transversals</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Planta / Servei</label>
+          <select id="sel-planta" onchange="updateAutoFields()">
+            <option value="">— Selecciona primer el centre —</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid three" style="margin-top:16px;">
+        <div class="field">
+          <label>Extensió telefònica</label>
+          <input type="text" id="auto-ext" class="auto-field" readonly placeholder="Automàtic">
+        </div>
+        <div class="field">
+          <label>Codi CFH</label>
+          <input type="text" id="auto-cfh" class="auto-field" readonly placeholder="Automàtic">
+        </div>
+        <div class="field">
+          <label>Sol·licitant</label>
+          <input type="text" id="solicitant" placeholder="Nom i cognoms">
+        </div>
+      </div>
+    </div>
+
+    <!-- INSTRUMENTAL -->
+    <div class="card">
+      <div class="card-title">Material a esterilitzar</div>
+      <table class="instrumental-table">
+        <thead>
+          <tr>
+            <th>Material</th>
+            <th style="width:90px; text-align:center;">Quantitat</th>
+          </tr>
+        </thead>
+        <tbody id="instrumental-body">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- OBSERVACIONS -->
+    <div class="card">
+      <div class="card-title">Observacions</div>
+      <textarea id="obs" rows="3" placeholder="Observacions opcionals sobre la petició..."></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="resetForm()">Netejar</button>
+      <button class="btn btn-primary" onclick="enviarPeticio()">✓ Enviar petició</button>
+    </div>
+  </div>
+
+  <!-- PANEL: CONSULTA -->
+  <div class="panel" id="panel-consulta">
+    <div class="section-title">Consultar estat d'una petició</div>
+    <div class="section-sub">Introdueix el codi de referència per veure l'estat actual del teu material.</div>
+
+    <div class="search-box">
+      <input type="text" id="search-code" placeholder="Ex: KR48201" maxlength="8" oninput="this.value=this.value.toUpperCase()">
+      <button class="btn btn-primary" onclick="buscarPeticio()">Consultar</button>
+    </div>
+
+    <div id="result-area"></div>
+  </div>
+
+</main>
+
+<!-- MODAL CONFIRMACIÓ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-icon">✓</div>
+    <h2>Petició enviada</h2>
+    <p>Anota o recorda el codi de referència per consultar l'estat del teu material.</p>
+    <div class="code-display" id="modal-code">—</div>
+    <div class="code-hint">Codi de referència de la petició</div>
+    <button class="btn btn-primary" style="width:100%;" onclick="closeModal()">Entesos</button>
+  </div>
+</div>
+
+<script>
+// DATA
+const CENTRES = {
+  hmi: {
+    nom: "Hospital Materno Infantil",
+    plantes: [
+      { id: "hmi_p5",  nom: "Planta 5",          ext: "4250", cfh: "4110" },
+      { id: "hmi_p7",  nom: "Planta 7",           ext: "4270", cfh: "4112" },
+      { id: "hmi_p8",  nom: "Planta 8",           ext: "4280", cfh: "4113" },
+      { id: "hmi_p9",  nom: "Planta 9",           ext: "4290", cfh: "4114" },
+      { id: "hmi_p10", nom: "Planta 10",          ext: "4300", cfh: "4115" },
+      { id: "hmi_uci_ped", nom: "UCI Pediàtrica", ext: "4310", cfh: "4120" },
+      { id: "hmi_neonatal", nom: "UCI Neonatal",  ext: "4320", cfh: "4121" },
+      { id: "hmi_comacasa", nom: "Comacasa",       ext: "4325", cfh: "4122" },
+      { id: "hmi_urg", nom: "Urgències",          ext: "4330", cfh: "4130" },
+    ]
+  },
+  hg: {
+    nom: "Hospital General",
+    plantes: [
+      { id: "hg_p1", nom: "Planta 1",  ext: "3110", cfh: "3010" },
+      { id: "hg_p2", nom: "Planta 2",  ext: "3120", cfh: "3011" },
+      { id: "hg_p3", nom: "Planta 3",  ext: "3130", cfh: "3012" },
+      { id: "hg_uci", nom: "UCI",      ext: "3200", cfh: "3020" },
+      { id: "hg_urg", nom: "Urgències",ext: "3300", cfh: "3030" },
+      { id: "hg_qx",  nom: "Quiròfan", ext: "3400", cfh: "3040" },
+    ]
+  },
+  ce: {
+    nom: "Consultes Externes",
+    plantes: [
+      { id: "ce_trau",  nom: "Traumatologia",     ext: "5110", cfh: "5010" },
+      { id: "ce_derm",  nom: "Dermatologia",       ext: "5120", cfh: "5011" },
+      { id: "ce_oftal", nom: "Oftalmologia",       ext: "5130", cfh: "5012" },
+      { id: "ce_oto",   nom: "Otorrinolaringologia",ext:"5140", cfh: "5013" },
+      { id: "ce_gine",  nom: "Ginecologia",        ext: "5150", cfh: "5014" },
+    ]
+  },
+  cap_horta: {
+    nom: "CAP Horta",
+    plantes: [
+      { id: "cap_h_gen", nom: "Medicina General", ext: "6110", cfh: "6010" },
+      { id: "cap_h_inf", nom: "Infermeria",        ext: "6120", cfh: "6011" },
+    ]
+  },
+  sant_andreu: {
+    nom: "Sant Andreu",
+    plantes: [
+      { id: "sa_gen",  nom: "Medicina General", ext: "7110", cfh: "7010" },
+      { id: "sa_urg",  nom: "Urgències",         ext: "7200", cfh: "7020" },
+    ]
+  },
+  transversal: {
+    nom: "Serveis Transversals",
+    plantes: [
+      { id: "tr_farm",  nom: "Farmàcia",           ext: "9110", cfh: "9010" },
+      { id: "tr_inv",   nom: "Institut Investigació",ext:"9120", cfh: "9011" },
+      { id: "tr_radio", nom: "Radiologia",          ext: "9130", cfh: "9012" },
+    ]
+  }
+};
+
+const INSTRUMENTAL = [
+  "Pinça de Kocher",
+  "Pinça de Halsted",
+  "Pinça de Backhaus",
+  "Tisora de Mayo",
+  "Tisora de Metzenbaum",
+  "Portaagulles de Mayo-Hegar",
+  "Bisturí mànec nº 3",
+  "Bisturí mànec nº 4",
+  "Separador de Farabeuf",
+  "Separador de Langenbeck",
+  "Cànula d'aspiració",
+  "Pinça de dissecció amb dents",
+  "Pinça de dissecció sense dents",
+  "Abaixallengua metàl·lic",
+  "Espècul vaginal",
+  "Pinça de biopsia",
+  "Agulla de Veress",
+  "Trocàcar 5mm",
+  "Trocàcar 10mm",
+  "Separador d'abdominals",
+];
+
+// FAKE PETICIONS (demo)
+const PETICIONS_DEMO = {
+  "KR48201": {
+    codi: "KR48201",
+    centre: "Hospital Materno Infantil",
+    servei: "UCI Pediàtrica",
+    solicitant: "M. García",
+    data: "11/06/2025 09:14",
+    estat: 3,
+    plasma: 2, vapor: 3,
+    obs: "",
+    material: [
+      { nom: "Pinça de Kocher", qty: 4 },
+      { nom: "Tisora de Mayo", qty: 2 },
+      { nom: "Portaagulles de Mayo-Hegar", qty: 1 },
+    ]
+  },
+  "TL09334": {
+    codi: "TL09334",
+    centre: "Consultes Externes",
+    servei: "Ginecologia",
+    solicitant: "J. Martínez",
+    data: "11/06/2025 08:45",
+    estat: 5,
+    plasma: 0, vapor: 1,
+    obs: "Ha vingut sense espècul, s'ha afegit manualment.",
+    material: [
+      { nom: "Espècul vaginal", qty: 3 },
+      { nom: "Pinça de biopsia", qty: 2 },
+    ]
+  },
+  "BX22017": {
+    codi: "BX22017",
+    centre: "Hospital Materno Infantil",
+    servei: "Urgències",
+    solicitant: "A. Puig",
+    data: "11/06/2025 10:02",
+    estat: 1,
+    plasma: 0, vapor: 0,
+    obs: "",
+    material: [
+      { nom: "Bisturí mànec nº 3", qty: 2 },
+      { nom: "Pinça de dissecció amb dents", qty: 2 },
+      { nom: "Separador de Farabeuf", qty: 2 },
+    ]
+  }
+};
+
+const ESTATS = [
+  { label: "Enviada",          icon: "📤", cls: "badge-sent" },
+  { label: "Rebuda",           icon: "📥", cls: "badge-received" },
+  { label: "Empaquetant",      icon: "📦", cls: "badge-packaging" },
+  { label: "En autoclau",      icon: "🔬", cls: "badge-autoclave" },
+  { label: "Llesta per sortir",icon: "✅", cls: "badge-ready" },
+  { label: "Entregada",        icon: "🏥", cls: "badge-delivered" },
+];
+
+// INIT
+document.addEventListener('DOMContentLoaded', () => {
+  renderDate();
+  renderInstrumental();
+});
+
+function renderDate() {
+  const now = new Date();
+  document.getElementById('headerDate').textContent =
+    now.toLocaleDateString('ca-ES', { weekday:'long', day:'2-digit', month:'long', year:'numeric' }) +
+    '  ' + now.toLocaleTimeString('ca-ES', { hour:'2-digit', minute:'2-digit' });
+  setTimeout(renderDate, 30000);
+}
+
+function renderInstrumental() {
+  const tbody = document.getElementById('instrumental-body');
+  tbody.innerHTML = INSTRUMENTAL.map(item => `
+    <tr>
+      <td>${item}</td>
+      <td style="text-align:center;">
+        <input type="number" class="qty-input" min="0" max="99" value="0" id="qty_${item.replace(/\s/g,'_')}">
+      </td>
+    </tr>
+  `).join('');
+}
+
+function updatePlanta() {
+  const centreKey = document.getElementById('sel-centre').value;
+  const sel = document.getElementById('sel-planta');
+  document.getElementById('auto-ext').value = '';
+  document.getElementById('auto-cfh').value = '';
+  if (!centreKey) {
+    sel.innerHTML = '<option value="">— Selecciona primer el centre —</option>';
+    return;
+  }
+  const plantes = CENTRES[centreKey].plantes;
+  sel.innerHTML = '<option value="">— Selecciona planta/servei —</option>' +
+    plantes.map(p => `<option value="${p.id}">${p.nom}</option>`).join('');
+}
+
+function updateAutoFields() {
+  const centreKey = document.getElementById('sel-centre').value;
+  const plantaId = document.getElementById('sel-planta').value;
+  if (!centreKey || !plantaId) return;
+  const planta = CENTRES[centreKey].plantes.find(p => p.id === plantaId);
+  if (planta) {
+    document.getElementById('auto-ext').value = planta.ext;
+    document.getElementById('auto-cfh').value = planta.cfh;
+  }
+}
+
+function generateCode() {
+  const LETTERS = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; // sense O ni I
+  let code = '';
+  for (let i = 0; i < 2; i++) code += LETTERS[Math.floor(Math.random() * LETTERS.length)];
+  const numLen = Math.random() > 0.5 ? 5 : 6;
+  for (let i = 0; i < numLen; i++) code += Math.floor(Math.random() * 10);
+  return code;
+}
+
+function enviarPeticio() {
+  const centre = document.getElementById('sel-centre').value;
+  const planta = document.getElementById('sel-planta').value;
+  const solicitant = document.getElementById('solicitant').value.trim();
+  if (!centre || !planta || !solicitant) {
+    alert('Si us plau, omple centre, planta/servei i nom del sol·licitant.');
+    return;
+  }
+  const code = generateCode();
+  document.getElementById('modal-code').textContent = code;
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  resetForm();
+}
+
+function resetForm() {
+  document.getElementById('sel-centre').value = '';
+  document.getElementById('sel-planta').innerHTML = '<option value="">— Selecciona primer el centre —</option>';
+  document.getElementById('auto-ext').value = '';
+  document.getElementById('auto-cfh').value = '';
+  document.getElementById('solicitant').value = '';
+  document.getElementById('obs').value = '';
+  document.querySelectorAll('.qty-input').forEach(i => i.value = 0);
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  if (tab === 'nova') {
+    document.querySelectorAll('.tab')[0].classList.add('active');
+    document.getElementById('panel-nova').classList.add('active');
+  } else {
+    document.querySelectorAll('.tab')[1].classList.add('active');
+    document.getElementById('panel-consulta').classList.add('active');
+  }
+}
+
+function buscarPeticio() {
+  const code = document.getElementById('search-code').value.trim().toUpperCase();
+  const area = document.getElementById('result-area');
+  if (!code) return;
+
+  const p = PETICIONS_DEMO[code];
+  if (!p) {
+    area.innerHTML = `
+      <div class="not-found">
+        <div class="icon">🔍</div>
+        <p>No s'ha trobat cap petició amb el codi <strong>${code}</strong>.</p>
+        <p style="font-size:12px; margin-top:8px;">Comprova que el codi és correcte.</p>
+      </div>`;
+    return;
+  }
+
+  const estat = ESTATS[p.estat];
+  const timeline = ESTATS.map((e, i) => {
+    const cls = i < p.estat ? 'done' : i === p.estat ? 'current' : '';
+    return `
+      <div class="timeline-step">
+        <div class="timeline-dot ${cls}">${i < p.estat ? '✓' : e.icon}</div>
+        <div class="timeline-label ${cls}">${e.label}</div>
+      </div>`;
+  }).join('');
+
+  const bolsas = (p.plasma > 0 || p.vapor > 0) ? `
+    <div class="bolsas-row">
+      ${p.vapor > 0 ? `<div class="bolsa-chip bolsa-vapor">💨 Vapor: ${p.vapor} bossa${p.vapor>1?'es':''}</div>` : ''}
+      ${p.plasma > 0 ? `<div class="bolsa-chip bolsa-plasma">⚡ Plasma: ${p.plasma} bossa${p.plasma>1?'es':''}</div>` : ''}
+    </div>` : '';
+
+  area.innerHTML = `
+    <div class="status-card">
+      <div class="status-header">
+        <div>
+          <div class="status-code">${p.codi}</div>
+          <div class="status-meta">${p.centre} · ${p.servei} · ${p.data}</div>
+        </div>
+        <div class="status-badge ${estat.cls}">${estat.icon} ${estat.label}</div>
+      </div>
+      <div class="status-body">
+        <div class="status-timeline">${timeline}</div>
+        <div class="info-row">
+          <div class="info-item"><label>Sol·licitant</label><span>${p.solicitant}</span></div>
+          <div class="info-item"><label>Material enviat</label><span>${p.material.length} tipus</span></div>
+          <div class="info-item"><label>Estat</label><span>${estat.icon} ${estat.label}</span></div>
+        </div>
+        <table class="instrumental-table">
+          <thead><tr><th>Material</th><th>Quantitat</th></tr></thead>
+          <tbody>
+            ${p.material.map(m => `<tr><td>${m.nom}</td><td style="font-family:var(--mono); font-weight:600;">${m.qty}</td></tr>`).join('')}
+          </tbody>
+        </table>
+        ${bolsas}
+        ${p.obs ? `<div style="margin-top:16px; padding:12px 16px; background:var(--amber-light); border-radius:8px; font-size:13px; color:var(--amber);"><strong>Observacions:</strong> ${p.obs}</div>` : ''}
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
