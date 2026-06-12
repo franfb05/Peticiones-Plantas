@@ -241,9 +241,10 @@
 <div id="print-area" style="display:none;"></div>
 <div class="modal-overlay" id="modal">
   <div class="modal" style="max-width:380px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <h2 style="margin:0;">Petició enviada</h2>
-      <button class="btn-print" onclick="imprimirTiquet()" style="margin:0;">🖨️ Imprimir tiquet</button>
+    <div style="text-align:center;margin-bottom:16px;">
+      <div class="modal-icon">✓</div>
+      <h2>Petició enviada</h2>
+      <p style="font-size:13px;color:var(--gray-400);margin-top:4px;">Imprimint tiquet automàticament...</p>
     </div>
 
     <!-- PREVIEW TIQUET -->
@@ -504,6 +505,8 @@ async function enviarPeticio() {
     document.getElementById('print-area').innerHTML   =
       '<div style="padding:10mm;">' + document.getElementById('tiquet-preview').outerHTML + '</div>';
     document.getElementById('modal').classList.add('show');
+    // Imprimir automàticament
+    setTimeout(() => imprimirTiquet(), 400);
   } catch(e) {
     errorDiv.innerHTML = `<div class="error-msg">Error: ${e.message}</div>`;
   } finally {
