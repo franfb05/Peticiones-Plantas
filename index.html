@@ -254,6 +254,11 @@
         <div class="tiq-divider">--------------------------------</div>
         <div class="tiq-codi" id="tiq-codi">——————</div>
         <div class="tiq-divider">--------------------------------</div>
+        <div style="text-align:center;margin:4px 0;">
+          <div style="font-size:9px;font-weight:700;color:#555;letter-spacing:0.05em;">COD. VERIFICACIÓ</div>
+          <div id="tiq-verif" style="font-size:24px;font-weight:700;letter-spacing:0.2em;color:#000;">———</div>
+        </div>
+        <div class="tiq-divider">--------------------------------</div>
         <div class="tiq-row"><span class="tiq-label">CENTRE</span><span class="tiq-val" id="tiq-centre">—</span></div>
         <div class="tiq-row"><span class="tiq-label">SERVEI</span><span class="tiq-val" id="tiq-servei">—</span></div>
         <div class="tiq-row"><span class="tiq-label">DATA</span><span class="tiq-val" id="tiq-data">—</span></div>
@@ -434,6 +439,13 @@ function generateCode() {
   return c;
 }
 
+function generateVerificacio() {
+  const L = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  let n = '';
+  for (let i=0;i<3;i++) n += Math.floor(Math.random()*10);
+  return n + L[Math.floor(Math.random()*L.length)];
+}
+
 async function enviarPeticio() {
   const centre   = document.getElementById('sel-centre').value;
   const serveiId = document.getElementById('sel-servei').value;
@@ -473,8 +485,10 @@ async function enviarPeticio() {
 
   const codi = generateCode();
   try {
+    const codVerif = generateVerificacio();
     const res = await post('peticions', {
       codi,
+      cod_verificacio: codVerif,
       centre_nom:   servei.centre,
       planta_nom:   servei.servei_nom,
       extensio:     servei.extensio || '',
@@ -495,6 +509,7 @@ async function enviarPeticio() {
     const dataStr = ara.toLocaleDateString('ca-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
     const horaStr = ara.toLocaleTimeString('ca-ES',{hour:'2-digit',minute:'2-digit'});
     document.getElementById('tiq-codi').textContent   = codi;
+    document.getElementById('tiq-verif').textContent  = codVerif;
     document.getElementById('tiq-centre').textContent = servei.centre || '—';
     document.getElementById('tiq-servei').textContent = servei.servei_nom || '—';
     document.getElementById('tiq-data').textContent   = dataStr;
