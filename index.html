@@ -117,6 +117,45 @@
   .btn-add-other:hover { background:var(--blue-light); border-color:var(--blue-accent); }
   .not-found { text-align:center; padding:48px 24px; color:var(--gray-400); }
   .not-found .icon { font-size:40px; margin-bottom:12px; }
+
+  /* TIQUET TÈRMIC */
+  .tiquet {
+    width:280px;
+    background:#fff;
+    font-family:'JetBrains Mono', monospace;
+    padding:16px 12px;
+    border:1px solid #ddd;
+    box-shadow:0 2px 8px rgba(0,0,0,0.12);
+    font-size:11px;
+    color:#000;
+  }
+  .tiq-hospital { text-align:center; font-size:10px; font-weight:700; letter-spacing:0.05em; margin-bottom:4px; }
+  .tiq-divider { color:#999; font-size:10px; margin:4px 0; letter-spacing:0; }
+  .tiq-codi { text-align:center; font-size:36px; font-weight:700; letter-spacing:0.15em; margin:8px 0; line-height:1; }
+  .tiq-row { display:flex; justify-content:space-between; gap:8px; margin:3px 0; }
+  .tiq-label { font-size:9px; font-weight:700; color:#555; white-space:nowrap; }
+  .tiq-val { font-size:10px; font-weight:600; text-align:right; word-break:break-word; }
+  .tiq-small { font-size:9px; line-height:1.6; color:#333; }
+  .tiq-footer { text-align:center; font-size:9px; color:#777; margin-top:4px; line-height:1.5; }
+  .btn-print { background:var(--gray-100); color:var(--gray-800); border:1.5px solid var(--gray-200); display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:8px; font-family:var(--font); font-size:13px; font-weight:600; cursor:pointer; }
+  .btn-print:hover { background:var(--gray-200); }
+
+  @media print {
+    body > * { display:none !important; }
+    #print-area {
+      display:block !important;
+      position:fixed; inset:0;
+    }
+    #print-area .tiquet {
+      width:80mm;
+      margin:0;
+      padding:8px 6px;
+      border:none;
+      box-shadow:none;
+      font-size:10px;
+    }
+    #print-area .tiq-codi { font-size:32px; }
+  }
   .loading { text-align:center; padding:32px; color:var(--gray-400); font-size:14px; }
   .error-msg { background:#FEE2E2; color:#DC2626; padding:12px 16px; border-radius:8px; font-size:13px; margin-bottom:16px; }
   .empty-serveis { background:var(--amber-light); color:var(--amber); padding:12px 16px; border-radius:8px; font-size:13px; margin-bottom:16px; }
@@ -198,13 +237,34 @@
   </div>
 </main>
 
+
+<div id="print-area" style="display:none;"></div>
 <div class="modal-overlay" id="modal">
-  <div class="modal">
-    <div class="modal-icon">✓</div>
-    <h2>Petició enviada</h2>
-    <p>Anota el codi de referència per consultar l'estat del teu material.</p>
-    <div class="code-display" id="modal-code">—</div>
-    <div class="code-hint">Codi de referència de la petició</div>
+  <div class="modal" style="max-width:380px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <h2 style="margin:0;">Petició enviada</h2>
+      <button class="btn-print" onclick="imprimirTiquet()" style="margin:0;">🖨️ Imprimir tiquet</button>
+    </div>
+
+    <!-- PREVIEW TIQUET -->
+    <div style="display:flex;justify-content:center;margin-bottom:20px;">
+      <div id="tiquet-preview" class="tiquet">
+        <div class="tiq-hospital">VALL D'HEBRON · ESTERILITZACIÓ</div>
+        <div class="tiq-divider">--------------------------------</div>
+        <div class="tiq-codi" id="tiq-codi">——————</div>
+        <div class="tiq-divider">--------------------------------</div>
+        <div class="tiq-row"><span class="tiq-label">CENTRE</span><span class="tiq-val" id="tiq-centre">—</span></div>
+        <div class="tiq-row"><span class="tiq-label">SERVEI</span><span class="tiq-val" id="tiq-servei">—</span></div>
+        <div class="tiq-row"><span class="tiq-label">DATA</span><span class="tiq-val" id="tiq-data">—</span></div>
+        <div class="tiq-row"><span class="tiq-label">HORA</span><span class="tiq-val" id="tiq-hora">—</span></div>
+        <div class="tiq-row"><span class="tiq-label">USUARI</span><span class="tiq-val" id="tiq-usuari">—</span></div>
+        <div class="tiq-divider">--------------------------------</div>
+        <div class="tiq-small" id="tiq-material"></div>
+        <div class="tiq-divider">--------------------------------</div>
+        <div class="tiq-footer">Conserva aquest tiquet per<br>consultar l'estat de la petició</div>
+      </div>
+    </div>
+
     <button class="btn btn-primary" style="width:100%;" onclick="closeModal()">Entesos</button>
   </div>
 </div>
@@ -250,14 +310,14 @@ const INSTRUMENTAL = [
 ];
 
 const ESTATS = [
-  {label:"Enviada",icon:"📤",cls:"badge-enviada"},
-  {label:"Rebuda",icon:"📥",cls:"badge-rebuda"},
-  {label:"Empaquetant",icon:"📦",cls:"badge-empaquetant"},
-  {label:"En autoclau",icon:"🔬",cls:"badge-autoclave"},
-  {label:"Llesta per sortir",icon:"✅",cls:"badge-llesta"},
-  {label:"Entregada",icon:"🏥",cls:"badge-entregada"},
+  {label:"Enviada",          icon:"📤", cls:"badge-enviada"},
+  {label:"Rebuda",           icon:"📥", cls:"badge-rebuda"},
+  {label:"Rebut i empaquetat",icon:"📦",cls:"badge-empaquetant"},
+  {label:"En autoclau",      icon:"🔬", cls:"badge-autoclave"},
+  {label:"Llesta per sortir",icon:"✅", cls:"badge-llesta"},
+  {label:"Entregada",        icon:"🏥", cls:"badge-entregada"},
 ];
-const ESTAT_KEY = ["enviada","rebuda","empaquetant","autoclave","llesta","entregada"];
+const ESTAT_KEY = ["enviada","rebuda","empaquetat","autoclave","llesta","entregada"];
 
 let serveisData = []; // tots els serveis carregats
 
@@ -358,6 +418,13 @@ function addOtherRow() {
   div.querySelector('input[type="text"]').focus();
 }
 
+
+function imprimirTiquet() {
+  document.getElementById('print-area').style.display = 'block';
+  window.print();
+  document.getElementById('print-area').style.display = 'none';
+}
+
 function generateCode() {
   const L = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
   let c = L[Math.floor(Math.random()*L.length)] + L[Math.floor(Math.random()*L.length)];
@@ -423,7 +490,19 @@ async function enviarPeticio() {
       peticio_id: peticioId, material_nom: m.nom, quantitat: m.qty
     })));
 
-    document.getElementById('modal-code').textContent = codi;
+    const ara = new Date();
+    const dataStr = ara.toLocaleDateString('ca-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
+    const horaStr = ara.toLocaleTimeString('ca-ES',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('tiq-codi').textContent   = codi;
+    document.getElementById('tiq-centre').textContent = servei.centre || '—';
+    document.getElementById('tiq-servei').textContent = servei.servei_nom || '—';
+    document.getElementById('tiq-data').textContent   = dataStr;
+    document.getElementById('tiq-hora').textContent   = horaStr;
+    document.getElementById('tiq-usuari').textContent = solicitant;
+    document.getElementById('tiq-material').innerHTML =
+      material.map(m => m.nom.split(' · ')[1] + ' x' + m.qty).join('<br>');
+    document.getElementById('print-area').innerHTML   =
+      '<div style="padding:10mm;">' + document.getElementById('tiquet-preview').outerHTML + '</div>';
     document.getElementById('modal').classList.add('show');
   } catch(e) {
     errorDiv.innerHTML = `<div class="error-msg">Error: ${e.message}</div>`;
